@@ -33,6 +33,8 @@ public final class Injector {
     private var singletons: [String: Any] = [:]
     private var metadata: [String: Scope] = [:]
     
+    public init() {  }
+    
     public func add<T>(scope: Scope = .unique, _ factory: @escaping () -> T) {
         let key = String(describing: T.self)
         
