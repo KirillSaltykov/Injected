@@ -1,0 +1,7 @@
+coverage_service: cobertura_xml
+xcodeproj: ./Injected.xcodeproj
+scheme: Injected-Package
+source_directory: Sources/
+output_directory: ./report
+ignore:
+  - Tests/*
