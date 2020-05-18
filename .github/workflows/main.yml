@@ -16,6 +16,6 @@ jobs:
     - name: Create Xcodeproj
       run: swift package generate-xcodeproj
     - name: Run tests
-      run: xcodebuild build test -scheme Injected-Package -enableCodeCoverage YES
+      run: xcodebuild build test -scheme Injected-Package -enableCodeCoverage YES | xcpretty -r junit && exit ${PIPESTATUS[0]}
     - name: Publish code coverage results
       run: bash <(curl -s https://codecov.io/bash)
