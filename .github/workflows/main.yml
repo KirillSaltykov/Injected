@@ -13,9 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
+    - name: Create Xcodeproj
+      run: swift package generate-xcodeproj
     - name: Run tests
-      run: swift test -v
+      run: xcodebuild build test -scheme Injected-Package -enableCodeCoverage YES
     - name: Publish code coverage results
       run: bash <(curl -s https://codecov.io/bash)
