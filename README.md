@@ -33,3 +33,10 @@ For singletons you can use `Scope`:
 ```Swift
 container.add(scope: .singletone, { Engine(power: 88.7) as Engine })
 ```
+
+## How to install
+
+This library is only available as an SPM package
+```Swift
+.package(url: "https://github.com/KirillSaltykov/Injected.git", .upToNextMinor(from: "0.1.0"))
+```
