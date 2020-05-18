@@ -40,7 +40,7 @@ final class InjectedTests: XCTestCase {
     func testSingletoneScope() {
         let container = Injector()
         
-        container.add(scope: .singletone, { Wheel() as Wheel })
+        container.add(scope: .singleton, { Wheel() as Wheel })
         
         let sut1: Wheel = container.resolve()
         let sut2: Wheel = container.resolve()

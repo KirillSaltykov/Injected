@@ -23,14 +23,14 @@
  */
 
 public enum Scope {
-    case unique, singletone
+    case unique, singleton
 }
 
 public final class Injector {
     public static var shared = Injector()
     
     private var factories: [String: () -> Any] = [:]
-    private var singletones: [String: Any] = [:]
+    private var singletons: [String: Any] = [:]
     private var metadata: [String: Scope] = [:]
     
     public func add<T>(scope: Scope = .unique, _ factory: @escaping () -> T) {
@@ -39,8 +39,8 @@ public final class Injector {
         switch scope {
         case .unique:
             self.factories[key] = factory
-        case .singletone:
-            self.singletones[key] = factory()
+        case .singleton:
+            self.singletons[key] = factory()
         }
         
         self.metadata[key] = scope
@@ -60,8 +60,8 @@ public final class Injector {
             }
             
             return instance
-        case .singletone:
-            guard let instance = self.singletones[key] as? T else {
+        case .singleton:
+            guard let instance = self.singletons[key] as? T else {
                 fatalError("Can not find \(T.self)")
             }
             
