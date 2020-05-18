@@ -16,6 +16,10 @@ jobs:
     - name: Create Xcodeproj
       run: swift package generate-xcodeproj
     - name: Run tests
-      run: xcodebuild build test -scheme Injected-Package -enableCodeCoverage YES | xcpretty -r junit && exit ${PIPESTATUS[0]}
+      run: xcodebuild build test -scheme Injected-Package -enableCodeCoverage YES
+    - name: Install Slather
+      run: gem install slather
+    - name: Prepare coverage files
+      run: slather
     - name: Publish code coverage results
-      run: bash <(curl -s https://codecov.io/bash)
+      run: bash <(curl -s https://codecov.io/bash) -f ./report/cobertura.xml -X coveragepy -X gcov -X xcode
