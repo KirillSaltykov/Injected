@@ -22,21 +22,51 @@
  SOFTWARE.
  */
 
+public enum Scope {
+    case unique, singletone
+}
+
 public final class Injector {
     public static var shared = Injector()
     
     private var factories: [String: () -> Any] = [:]
+    private var singletones: [String: Any] = [:]
+    private var metadata: [String: Scope] = [:]
     
-    public func add<T: Any>(_ factory: @escaping () -> T) {
-        self.factories[String(describing: T.self)] = factory
+    public func add<T>(scope: Scope = .unique, _ factory: @escaping () -> T) {
+        let key = String(describing: T.self)
+        
+        switch scope {
+        case .unique:
+            self.factories[key] = factory
+        case .singletone:
+            self.singletones[key] = factory()
+        }
+        
+        self.metadata[key] = scope
     }
     
     public func resolve<T: Any>() -> T {
-        guard let component: T = factories[String(describing: T.self)]?() as? T else {
-            fatalError("Can not resolve dependency: \(T.self)")
+        let key = String(describing: T.self)
+        
+        guard let meta = self.metadata[key] else {
+            fatalError("Empty metadata: \(T.self)")
         }
         
-        return component
+        switch meta {
+        case .unique:
+            guard let instance = self.factories[key]?() as? T else {
+                fatalError("Can not create \(T.self)")
+            }
+            
+            return instance
+        case .singletone:
+            guard let instance = self.singletones[key] as? T else {
+                fatalError("Can not find \(T.self)")
+            }
+            
+            return instance
+        }
     }
 }
 
@@ -47,5 +77,5 @@ public struct Injected<Component> {
         Injector.shared.resolve()
     }
     
-    public init() {}
+    public init() { }
 }
